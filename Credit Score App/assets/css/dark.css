@@ -1,0 +1,30 @@
+body{
+    transition: background 2s;
+    background: url(https://wallpaperaccess.com/full/2324580.jpg) no-repeat;
+    
+}
+table{
+    transition: all 2s;
+    background-color: #3a3a3a;
+    color:#fff;
+}
+.filter{
+    transition: all 2s;
+    background: gray;
+}
+[data-translate=selectlang]{
+    color: white;
+}
+tbody td{
+    color: white;
+}
+table tr:nth-child(even) {
+    transition: all 2s;
+    background-color: #424141;
+}
+table tr:not(:first-child):hover {
+    background: linear-gradient(to bottom, #000000 0%, #b4ff0030 100%);
+}
+#main-page > div.container > section > table > tbody:first-child{
+color:#000;
+}
