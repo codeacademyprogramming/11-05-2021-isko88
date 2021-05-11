@@ -394,6 +394,14 @@ hr {
   background: linear-gradient(to left, #434343, #000000);
 }
 
+.user-photo img {
+  border-radius: 50%;
+}
+
+.user-fullname {
+  color: #4a4aff;
+}
+
 .container-login {
   margin: 0 auto;
   max-width: 1600px;

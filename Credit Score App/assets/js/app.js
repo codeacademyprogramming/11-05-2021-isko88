@@ -114,12 +114,10 @@ function buildTable(filtertype = false) {
               const customerPhotoURL = customer_data["img"];
               const customerFullName =
                 customer_data["name"] + " " + customer_data["surname"];
-              document.querySelector(
-                "#current-customer-photo"
-              ).src = customerPhotoURL;
-              document.querySelector(
-                "#current-customer-fullname"
-              ).innerText = customerFullName;
+              document.querySelector("#current-customer-photo").src =
+                customerPhotoURL;
+              document.querySelector("#current-customer-fullname").innerText =
+                customerFullName;
               customer_data["loans"].forEach((loan) => {
                 const loaner = loan["loaner"];
                 const amount = loan["amount"]["value"];
@@ -242,8 +240,9 @@ function Default_Filter(data) {
 }
 
 // Login Page Section
-document.querySelector("#login-btn").addEventListener("click", function (e) {
+document.querySelector("#login_form").addEventListener("submit", function (e) {
   e.preventDefault();
+
   const admindata = {
     username: "pyp",
     email: "pyp@pyp.az",
@@ -256,25 +255,45 @@ document.querySelector("#login-btn").addEventListener("click", function (e) {
     username.value.toLowerCase() == admindata["username"].toLowerCase() &&
     password.value == admindata["password"]
   ) {
-    document.querySelector("#login-form-page").style.display = "none";
-    document.querySelector("#main-page").style.display = "block";
-    sessionStorage.setItem("admindata", JSON.stringify(admindata));
-    let now = new Date();
-    let time = now.getTime();
-    time += 3600 * 1000;
-    now.setTime(time);
+    let swaltexts = ["Success!","Welcome , dear "];
+    if (localStorage.lang == "AZ") {
+      swaltexts = [translater["AZ"].success,translater["AZ"].success_login_message];
+    }
+    swal(
+      swaltexts[0],
+      `${swaltexts[1]} ${admindata["username"].toLowerCase()}`,
+      "success"
+    ).then((res) => {
+      document.querySelector("#login-form-page").style.display = "none";
+      document.querySelector("#main-page").style.display = "block";
+      reqApires(); //request random api user and set data to sessionStorage
 
-    const token = getToken();
+      let copyAdmindata = { ...admindata };
+      delete copyAdmindata.password;
+      sessionStorage.setItem("admindata", JSON.stringify(copyAdmindata));
+      let now = new Date();
+      let time = now.getTime();
+      time += 3600 * 1000;
+      now.setTime(time);
 
-    const expires = `expires=${now.toUTCString()}`;
-    document.cookie = `token=${token};${expires}`;
+      const token = getToken();
+
+      const expires = `expires=${now.toUTCString()}`;
+      document.cookie = `token=${token};${expires}`;
+    });
   } else {
     username.value = "";
     password.value = "";
-    document.querySelector(".login-form .error-message").style.display =
-      "block";
+    let swaltexts = ["Upsss!","The username or password is incorrect."];
+    if (localStorage.lang == "AZ") {
+     swaltexts = [translater["AZ"].upsss,translater["AZ"].login_error_message]
+    }
+    swal(swaltexts[0], swaltexts[1], "error");
+    // document.querySelector(".login-form .error-message").style.display =
+    //   "block";
   }
 });
+
 // Login Page END
 // -----------------
 const cookietoken = `token=${getToken()}`;
@@ -315,6 +334,13 @@ const translater = {
     logout: "Çıxış",
     dark_mode: "Gecə Modu",
     light_mode: "Gündüz Modu",
+    success: "Uğurlu!",
+    success_login_message: "Xoş gəldiniz , əziz",
+    logout_message: "Çıxış etmək istədiyinizə əminsinizmi?",
+    yes: "Bəli",
+    no: "Xeyir",
+    upsss:"Ohaaa!)",
+    login_error_message:"İstifadəçi adı və ya şifrə yalnışdır.",
   },
 
   EN: {
@@ -368,8 +394,7 @@ function changeLang(lang) {
   willbetranslate.forEach((e) => {
     if (e.id == "theme_mode") {
       e.innerText = translater[lang][e.getAttribute("data-mode")];
-    }else
-    if (e.id == "search-input") {
+    } else if (e.id == "search-input") {
       e.setAttribute(
         "placeholder",
         translater[lang][e.getAttribute("data-translate")]
@@ -390,15 +415,29 @@ switch (localStorage.getItem("lang")) {
     break;
 }
 document.querySelector("#logout-btn").addEventListener("click", function () {
-  sessionStorage.clear();
-  // localStorage.clear();
-  let now = new Date();
-  let time = now.getTime();
-  let expireTime = time - 1000 * 3600000;
-  now.setTime(expireTime);
-  let res = `token=1;expires=${now.toUTCString()};`;
-  document.cookie = res;
-  location.reload();
+  let swaltext = "Are you sure you want to log out?";
+  let swalbuttons = ["No","Yes"];
+  if(localStorage.lang == "AZ"){
+  swaltext = translater["AZ"].logout_message;
+  swalbuttons = [translater["AZ"].no,translater["AZ"].yes];
+ }
+  swal({
+    text: swaltext,
+    icon: "warning",
+    buttons: swalbuttons,
+  }).then((res) => {
+    if (res) {
+      sessionStorage.clear();
+      // localStorage.clear();
+      let now = new Date();
+      let time = now.getTime();
+      let expireTime = time - 1000 * 3600000;
+      now.setTime(expireTime);
+      let res = `token=1;expires=${now.toUTCString()};`;
+      document.cookie = res;
+      location.reload();
+    }
+  });
 });
 document.querySelector("#theme_mode").addEventListener("click", function () {
   if (this.getAttribute("data-mode") == "dark_mode") {
@@ -419,8 +458,35 @@ if (localStorage.theme == "dark") {
   document.querySelector("#switch_theme").setAttribute("href", cssSrc);
   document.querySelector("#theme_mode").setAttribute("data-mode", "light_mode");
   document.querySelector("#theme_mode").innerText = "Light Mode";
-}else{
+} else {
   document.querySelector("#switch_theme").setAttribute("href", "");
   document.querySelector("#theme_mode").setAttribute("data-mode", "dark_mode");
   document.querySelector("#theme_mode").innerText = "Dark Mode";
 }
+
+//#region Request to api using fetch when admin login
+function reqApires() {
+  fetch("https://randomuser.me/api/")
+    .then((res) => res.json())
+    .then((json) => {
+      sessionStorage.setItem("userdata", JSON.stringify(json));
+      setDataFromSession(); // set data to html from SessionStorage
+    });
+}
+//#endregion
+
+//#region Check has userdata in sessionstorage
+function setDataFromSession() {
+  if (sessionStorage.userdata) {
+    const resJson = JSON.parse(sessionStorage.userdata).results[0];
+    const photo = resJson.picture.thumbnail;
+    const fullname = `${resJson.name.first} ${resJson.name.last}`;
+    // const gender = resJson.gender;
+    document.querySelector(".user-photo img").src = photo;
+    document.querySelector(".user-fullname span").innerText = fullname;
+    // document.querySelector('.user-gender span').innerText = gender;
+  }
+}
+
+//#endregion
+setDataFromSession(); //Check if userdata in sessionStorage set data to html

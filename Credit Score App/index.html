@@ -13,9 +13,9 @@
       <div class="container">
         <div class="login-form">
           <h3>Login</h3>
-          <span class="error-message">Username or Password incorrect!</span>
+          <!-- <span class="error-message">Username or Password is incorrect!</span> -->
           <br>
-          <form action="">
+          <form id="login_form" action="#">
             <div class="username">
               <input type="text" id="username" value="pyp" placeholder="Your Username..." required />
             </div>
@@ -114,8 +114,22 @@
                     data-translate="search_placeholder"
                     placeholder="Search Customers by Name, Surname"
                   />
+                  
                 </div>
               </div>
+              <div class="res-user-data">
+                <div class="row align-center">
+                 <div class="user-photo margin-right-5">
+                   <img src="" alt="User Photo">
+                 </div>
+                 <div class="user-fullname text-center">
+                   <strong><span></span></strong>
+                 </div>
+                 <!-- <div class="user-gender">
+                   <span></span>
+                 </div> -->
+                </div>
+               </div>
             </div>
             <div class="sort-filter">
               <ul class="flex-column">
@@ -164,7 +178,7 @@
         </section>
       </div>
     </section>
-
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="./assets/js/app.js?n=1"></script>
   </body>
 </html>
