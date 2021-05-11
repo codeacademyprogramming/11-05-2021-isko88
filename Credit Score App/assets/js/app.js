@@ -1,3 +1,5 @@
+
+
 buildTable();
 function buildTable(filtertype = false) {
   fetch("https://isko88.github.io/creditdata.json")
