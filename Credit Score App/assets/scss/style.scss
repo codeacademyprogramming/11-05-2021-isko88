@@ -1,0 +1,18 @@
+//Vendor
+@import "./lib/vendor/_vendor-dir";
+
+//Abstracts
+@import "./lib/abstracts/__abstracts-dir";
+
+//Base Styles
+@import "./lib/base/__base-dir";
+
+//Components
+@import "./lib/components/__components-dir";
+
+//Layout
+@import "./lib/layouts/__layouts-dir";
+
+//Home Page
+@import "./pages/index"
+

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./assets/css/style.css" />
+    <link rel="stylesheet" id="switch_theme" href="">
+    
+    <title>Credit Score App</title>
+  </head>
+  <body>
+    <!-- <div class="wrap">
+      <div class="loading">
+        <div class="bounceball"></div>
+        <div class="text">NOW LOADING</div>
+      </div>
+    </div> -->
+    <section id="login-form-page">
+      <div class="container">
+        <div class="login-form">
+          <h3>Login</h3>
+          <!-- <span class="error-message">Username or Password is incorrect!</span> -->
+          <br>
+          <form id="login_form" action="#">
+            <div class="username">
+              <input type="text" id="username" value="pyp" placeholder="Your Username..." required />
+            </div>
+            <div class="password">
+              <input type="password" id="pass" value="pyp" placeholder="Your Password..." required />
+            </div>
+            <div class="loginbtn">
+              <button id="login-btn" type="submit">Log In</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+    <section id="main-page">
+      <div class="page-theme">
+        <button type="button" id="theme_mode" data-translate="mode" data-mode="dark_mode" >Dark Mode</button> 
+      </div>
+      <div class="languages row justify-center">
+        <span class="margin-right-5" data-translate="selectlang"
+          >Change the language:
+        </span>
+        <ul>
+          <li data-lang="EN" data-translate="lang_EN">English</li>
+          <li data-lang="AZ" data-translate="lang_AZ">Azerbaijan</li>
+        </ul>
+      </div>
+      
+      <div class="logout">
+        <button data-translate="logout" type="button" id="logout-btn">Logout</button>
+      </div>
+      <div id="CustomerModal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <div
+            class="customer-photo-name text-center row align-center justify-center"
+          >
+            <img id="current-customer-photo" src="" alt="Customer Photo" />
+            <span id="current-customer-fullname"></span>
+          </div>
+          <section class="modal-table">
+            <table>
+              <tbody>
+                <tr>
+                  <th>#</th>
+                  <th data-translate="loaner">Loaner</th>
+                  <th data-translate="amount">Amount</th>
+                  <th data-translate="active_loan">Is active loan</th>
+                  <th data-translate="monthly_pay">Monthly pay</th>
+                  <th data-translate="due_amount">Due amount</th>
+                  <th data-translate="start_date">Start date</th>
+                  <th data-translate="end_date">End date</th>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+        </div>
+      </div>
+      <div class="container">
+        <h3 class="table-title" data-translate="credit_score">
+          Credit Score Table
+        </h3>
+        <!-- <div class="row space-between align-center">
+          <ul>
+            <li class="active">All</li>
+            <li>Paid</li>
+            <li>Unpaid</li>
+            <li>Overdue</li>
+          </ul>
+          <div class="total-payable">
+            <span
+              >Total payable amount: <span>900.00</span> <span>AZN</span>
+            </span>
+          </div>
+        </div> -->
+        <hr />
+
+        <section class="table">
+          <div class="filter">
+            <div class="row align-center space-between">
+              <div class="filter-search">
+                <div class="row">
+                  <button class="filter-btn d-flex align-center">
+                    <span
+                      ><img
+                        id="search"
+                        src="./assets/images/icons/Filter.svg"
+                        alt="Filter Icon"
+                    /></span>
+                    Filter
+                  </button>
+                  <input
+                    id="search-input"
+                    class="search"
+                    onkeyup="FilterByFullName()"
+                    type="text"
+                    data-translate="search_placeholder"
+                    placeholder="Search Customers by Name, Surname"
+                  />
+                  
+                </div>
+              </div>
+              <div class="res-user-data">
+                <div class="row align-center">
+                 <div class="user-photo margin-right-5">
+                   <img src="" alt="User Photo">
+                 </div>
+                 <div class="user-fullname text-center">
+                   <strong><span></span></strong>
+                 </div>
+                 <!-- <div class="user-gender">
+                   <span></span>
+                 </div> -->
+                </div>
+               </div>
+            </div>
+            <div class="sort-filter">
+              <ul class="flex-column">
+                <li data-translate="sort_by">Sort by:</li>
+                <li>
+                  <div class="row space-between sort-part">
+                    <label for="sort-default" data-translate="default"
+                      >Default</label
+                    ><input
+                      type="radio"
+                      name="radio-btn"
+                      id="sort-default"
+                      checked
+                    />
+                  </div>
+                </li>
+                <li>
+                  <div class="row space-between sort-part">
+                    <label for="sort-active-loan" data-translate="active_loan"
+                      >Active Loan</label
+                    ><input
+                      type="radio"
+                      name="radio-btn"
+                      id="sort-active-loan"
+                    />
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <table>
+            <tbody>
+              <tr>
+                <th>#</th>
+                <th data-translate="photo">Photo</th>
+                <th data-translate="name_surname">Name&Surname</th>
+                <th data-translate="monthly_salary">Monthly Salary</th>
+                <th data-translate="active_loan">Active loan</th>
+                <th data-translate="total_monthly_pay" class="text-center">
+                  Total monthly pay
+                </th>
+                <th data-translate="apply_for_loan">Apply for loan</th>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </div>
+    </section>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="./assets/js/app.js?n=1"></script>
+  </body>
+</html>
